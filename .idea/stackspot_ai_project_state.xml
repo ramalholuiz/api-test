@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectStateService">
+    <option name="data">
+      <map>
+        <entry key="luiz.ribeiro@ee.ufcg.edu.br">
+          <value>
+            <ProjectStateData>
+              <option name="conversationId" value="01J1048VZ4P9SY994G90XKCZSS" />
+              <option name="indexedFiles">
+                <map>
+                  <entry key="$USER_HOME$/AppData/Local/JetBrains/IdeaIC2024.1/httpFileSystem/catalog.json" value="585" />
+                  <entry key="$PROJECT_DIR$/pom.xml" value="3633" />
+                  <entry key="$PROJECT_DIR$/src/test/java/com/example/ApiTest.java" value="3576" />
+                  <entry key="$PROJECT_DIR$/src/test/java/com/example/Main.java" value="1466" />
+                  <entry key="$PROJECT_DIR$/src/test/java/com/example/RunCucumberTest.java" value="2991" />
+                  <entry key="$PROJECT_DIR$/src/test/java/com/example/StepDefinitions.java" value="3112" />
+                </map>
+              </option>
+              <option name="projectId" value="01J0ZZN40VQZ1BR2FZ5663YJHV" />
+            </ProjectStateData>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
