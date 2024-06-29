@@ -1,4 +1,4 @@
-package com.example;
+package com.example.login;
 
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
@@ -19,21 +19,25 @@ public class StepDefinitions {
 
     @Before
     public void setup() {
+
         RestAssured.baseURI = "https://api-desafio-qa.onrender.com";
     }
 
     @Given("the API endpoint is {string}")
     public void setEndpoint(String endpoint) {
+
         this.endpoint = RestAssured.baseURI + endpoint;
     }
 
     @Given("the request body is")
     public void setRequestBody(String requestBody) {
+
         this.requestBody = requestBody;
     }
 
     @When("I send a GET request")
     public void sendGETRequest() {
+
         response = given().when().get(endpoint);
     }
 

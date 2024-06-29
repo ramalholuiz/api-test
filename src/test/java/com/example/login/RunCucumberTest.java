@@ -1,4 +1,4 @@
-package com.example;
+package com.example.login;
 
 import org.junit.runner.RunWith;
 import io.cucumber.junit.Cucumber;
@@ -12,4 +12,8 @@ import io.cucumber.junit.CucumberOptions;
         publish = true // habilitar a publicação do relatório
 )
 public class RunCucumberTest {
+    // para rodar todos os testes
+    //    mvn test
+    //para rodar apenas o teste especifico
+    //    mvn test -Dtest=com.example.login.RunCucumberTest
 }

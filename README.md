@@ -14,6 +14,7 @@ Este projeto demonstra a automação de testes para uma API REST utilizando Java
 - **Maven**: 2.22.2
 - **Outras Ferramentas**: GitHub, Docker, Postman, intellij
 
+
 #### Funcionalidades
 
 - **Automação de Testes**: Testes automatizados para APIs RESTful.
