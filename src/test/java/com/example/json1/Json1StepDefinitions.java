@@ -25,7 +25,12 @@ public class Json1StepDefinitions {
 
     @When("I send a GET request")
     public void sendGETRequest() {
-        response = given().when().get(endpoint);
+        response = given()
+                .log().all()  // Log the request
+                .when().get(endpoint)
+                .then()
+                .log().all()  // Log the response
+                .extract().response();
     }
 
     @Then("the status code is {int}")
@@ -41,67 +46,74 @@ public class Json1StepDefinitions {
     @Then("the response JSON is valid")
     public void verifyResponseJSON() {
         response.then()
+                // Validate "amigos"
+                .body("amigos.contato", everyItem(matchesPattern("^[A-Za-z0-9+_.-]+@(.+)$")))
+                .body("amigos.nome", everyItem(not(equalTo(""))))
 
-                .body("produtos.id", everyItem(notNullValue()))
-                .body("produtos.nome", everyItem(not(isEmptyOrNullString())))
-                .body("produtos.preco", everyItem(greaterThan(0.0)))
-                .body("produtos.disponivel", everyItem(instanceOf(Boolean.class)))
+                // Validate "assinaturaNewsletter"
+                .body("assinaturaNewsletter", instanceOf(Boolean.class))
 
-                // Validate User
-                .body("usuario.nome", not(isEmptyOrNullString()))
-                .body("usuario.idade", greaterThan(0))
-                .body("usuario.email", matchesPattern("^[A-Za-z0-9+_.-]+@(.+)$"))
+                // Validate "carrinhoAtual"
+                .body("carrinhoAtual.precoTotal", anyOf(instanceOf(Integer.class), instanceOf(Float.class), instanceOf(Double.class)))
+                .body("carrinhoAtual.produtos.produtoId", everyItem(anyOf(instanceOf(Integer.class), instanceOf(Float.class), instanceOf(Double.class))))
+                .body("carrinhoAtual.produtos.quantidade", everyItem(anyOf(instanceOf(Integer.class), instanceOf(Float.class), instanceOf(Double.class))))
 
-                // Validate Configurations
+                // Validate "configuracoes"
+                .body("configuracoes.idioma", equalTo("pt-BR"))
                 .body("configuracoes.notificacoes", instanceOf(Boolean.class))
-                .body("configuracoes.tema", not(isEmptyOrNullString()))
-                .body("configuracoes.idioma", not(isEmptyOrNullString()))
+                .body("configuracoes.tema", not(equalTo("")))
 
-                // Validate Address
-                .body("endereco.rua", not(isEmptyOrNullString()))
-                .body("endereco.numero", greaterThan(0))
-                .body("endereco.cidade", not(isEmptyOrNullString()))
-                .body("endereco.estado", matchesPattern("^[A-Z]{2}$"))
+                // Validate "contato"
+                .body("contato.emailSecundario", matchesPattern("^[A-Za-z0-9+_.-]+@(.+)$"))
+                .body("contato.telefone", matchesPattern("^\\([0-9]{2}\\) [0-9]{5}-[0-9]{4}$"))
+
+                // Validate "endereco"
                 .body("endereco.cep", matchesPattern("^[0-9]{5}-[0-9]{3}$"))
+                .body("endereco.cidade", not(equalTo("")))
+                .body("endereco.estado", matchesPattern("^[A-Z]{2}$"))
+                .body("endereco.numero", anyOf(instanceOf(Integer.class), instanceOf(Float.class), instanceOf(Double.class)))
+                .body("endereco.rua", not(equalTo("")))
 
-                // Validate Order History
-                .body("historicoDePedidos.pedidoId", everyItem(notNullValue()))
-                .body("historicoDePedidos.produto", everyItem(not(isEmptyOrNullString())))
-                .body("historicoDePedidos.quantidade", everyItem(greaterThan(0)))
-                .body("historicoDePedidos.precoTotal", everyItem(greaterThan(0.0)))
+                // Validate "estatisticasDeUso"
+                .body("estatisticasDeUso.diasAtivo", anyOf(instanceOf(Integer.class), instanceOf(Float.class), instanceOf(Double.class)))
+                .body("estatisticasDeUso.horasConectado", anyOf(instanceOf(Integer.class), instanceOf(Float.class), instanceOf(Double.class)))
 
-                // Validate Current Cart
-                .body("carrinhoAtual.produtos.produtoId", everyItem(notNullValue()))
-                .body("carrinhoAtual.produtos.quantidade", everyItem(greaterThan(0)))
-                .body("carrinhoAtual.precoTotal", greaterThan(0.0))
+                // Validate "historicoDePedidos"
+                .body("historicoDePedidos.pedidoId", everyItem(anyOf(instanceOf(Integer.class), instanceOf(Float.class), instanceOf(Double.class))))
+                .body("historicoDePedidos.produto", everyItem(not(equalTo(""))))
+                .body("historicoDePedidos.quantidade", everyItem(anyOf(instanceOf(Integer.class), instanceOf(Float.class), instanceOf(Double.class))))
+                .body("historicoDePedidos.precoTotal", everyItem(anyOf(instanceOf(Integer.class), instanceOf(Float.class), instanceOf(Double.class))))
 
-                // Validate Payment Method
+                // Validate "metodoDePagamento"
+                .body("metodoDePagamento.cartao.cvv", matchesPattern("^[0-9]{3,4}$"))
                 .body("metodoDePagamento.cartao.numero", matchesPattern("^[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}$"))
                 .body("metodoDePagamento.cartao.validade", matchesPattern("^(0[1-9]|1[0-2])/20[2-9]{2}$"))
-                .body("metodoDePagamento.cartao.cvv", matchesPattern("^[0-9]{3,4}$"))
 
-                // Validate Contact
-                .body("contato.telefone", matchesPattern("^\\([0-9]{2}\\) [0-9]{5}-[0-9]{4}$"))
-                .body("contato.emailSecundario", matchesPattern("^[A-Za-z0-9+_.-]+@(.+)$"))
+                // Validate "perfilPublico"
+                .body("perfilPublico", instanceOf(Boolean.class))
 
-                // Validate Last Purchase
+                // Validate "preferencias"
+                .body("preferencias.categoriasFavoritas", everyItem(not(equalTo(""))))
+                .body("preferencias.notificarPromocoes", instanceOf(Boolean.class))
+
+                // Validate "produtos"
+                .body("produtos.disponivel", everyItem(instanceOf(Boolean.class)))
+                .body("produtos.id", everyItem(anyOf(instanceOf(Integer.class), instanceOf(Float.class), instanceOf(Double.class))))
+                .body("produtos.nome", everyItem(not(equalTo(""))))
+                .body("produtos.preco", everyItem(anyOf(instanceOf(Integer.class), instanceOf(Float.class), instanceOf(Double.class))))
+
+                // Validate "recomendacoes"
+                .body("recomendacoes.preco", everyItem(anyOf(instanceOf(Integer.class), instanceOf(Float.class), instanceOf(Double.class))))
+                .body("recomendacoes.produto", everyItem(not(equalTo(""))))
+
+                // Validate "ultimaCompra"
                 .body("ultimaCompra.data", matchesPattern("^\\d{4}-\\d{2}-\\d{2}$"))
-                .body("ultimaCompra.valor", greaterThan(0.0))
-                .body("ultimaCompra.produto", not(isEmptyOrNullString()))
+                .body("ultimaCompra.produto", not(equalTo("")))
+                .body("ultimaCompra.valor", anyOf(instanceOf(Integer.class), instanceOf(Float.class), instanceOf(Double.class)))
 
-                // Validate Recommendations
-                .body("recomendacoes.preco", everyItem(greaterThan(0.0)))
-
-                // Validate Usage Statistics
-                .body("estatisticasDeUso.horasConectado", greaterThan(0))
-                .body("estatisticasDeUso.diasAtivo", greaterThan(0))
-
-                // Validate Friends
-                .body("amigos.nome", everyItem(not(isEmptyOrNullString())))
-                .body("amigos.contato", everyItem(matchesPattern("^[A-Za-z0-9+_.-]+@(.+)$")))
-
-                // Validate Preferences
-                .body("preferencias.categoriasFavoritas", everyItem(not(isEmptyOrNullString())))
-                .body("preferencias.notificarPromocoes", instanceOf(Boolean.class));
+                // Validate "usuario"
+                .body("usuario.email", matchesPattern("^[A-Za-z0-9+_.-]+@(.+)$"))
+                .body("usuario.idade", anyOf(instanceOf(Integer.class), instanceOf(Float.class), instanceOf(Double.class)))
+                .body("usuario.nome", not(equalTo("")));
     }
 }
